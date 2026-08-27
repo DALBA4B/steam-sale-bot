@@ -1,0 +1,19 @@
+# Секреты. Никогда не коммитить.
+.env
+
+# Личные данные и рабочее состояние
+games.json
+state.json
+wishlist-items.json
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Мусор редакторов и ОС
+.claude/
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store

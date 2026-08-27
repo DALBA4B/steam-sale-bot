@@ -1,0 +1,15 @@
+{
+  "name": "steam-sale-bot",
+  "version": "1.0.0",
+  "description": "Раз в день присылает в Telegram список игр из вишлиста Steam, на которые есть скидка.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "loop": "node src/index.js --loop",
+    "dry": "node src/index.js --dry"
+  }
+}
