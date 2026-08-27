@@ -1,0 +1,59 @@
+# Как получить список игр для бота
+
+Боту нужен файл `games.json` со списком appid. Три способа, от простого к муторному. Ни один не требует пароля, ключа API и двухфакторки.
+
+## Способ 1. Одна строка в консоли браузера (рекомендую)
+
+Работает на твоей же сессии Steam, никаких расширений и программ.
+
+1. Открой в браузере <https://store.steampowered.com> и убедись, что ты залогинен.
+2. Нажми F12, перейди на вкладку **Console**.
+3. Если браузер просит — впиши `allow pasting` и нажми Enter.
+4. Вставь эту строку и нажми Enter:
+
+```js
+fetch('/dynamicstore/userdata/', { credentials: 'include' }).then(r => r.json()).then(d => { const a = d.rgWishlist || []; if (!a.length) return console.log('Вишлист пуст или ты не залогинен'); const u = URL.createObjectURL(new Blob([JSON.stringify(a)], { type: 'application/json' })); const l = document.createElement('a'); l.href = u; l.download = 'games.json'; l.click(); console.log('appid в вишлисте:', a.length); });
+```
+
+5. Скачается `games.json`. Положи его в папку бота.
+
+Что происходит: `/dynamicstore/userdata/` — служебный адрес Steam, который для текущей сессии отдаёт поле `rgWishlist` — массив appid. Профиль может быть закрытым.
+
+Повторяй раз в пару месяцев или после того, как добавишь много игр в вишлист.
+
+## Способ 2. Список названий вручную
+
+Если вишлиста в Steam нет и хочется просто следить за десятком игр — создай рядом файл `games.txt`, по одному названию в строке:
+
+```
+Red Dead Redemption 2
+Cyberpunk 2077
+Hollow Knight: Silksong
+```
+
+Потом:
+
+```
+node tools/resolve-names.js
+```
+
+Скрипт найдёт игры в поиске Steam, покажет, что нашёл, и запишет `games.json`. **Обязательно проверь вывод**: поиск по названию иногда попадает не туда (`Minecraft` находит Minecraft Dungeons). Строки, где совпадение сомнительное, помечаются `?` — исправь такие, указав appid прямо в `games.txt` после названия:
+
+```
+Minecraft = 0
+Death Stranding = 1190460
+```
+
+`= 0` значит «пропустить эту игру».
+
+## Способ 3. Своими руками
+
+`games.json` — это просто список appid. Appid видно в адресе страницы игры: `store.steampowered.com/app/1174180/` → `1174180`.
+
+```json
+[1174180, 1091500, 292030]
+```
+
+## Способ 4. Из расширения
+
+Если ты пользовался [T-igruha-to-Steam-Wishlist](https://github.com/DALBA4B/T-igruha-to-Steam-Wishlist), его выгрузка подходит как есть: положи `wishlist-items.json` рядом, бот сам возьмёт оттуда appid. Записи без appid (не найденные и спорные игры) пропускаются, поэтому Способ 1 полнее.
