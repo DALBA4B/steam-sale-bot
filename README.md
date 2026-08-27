@@ -6,7 +6,7 @@
 
 ```
 🎮 Скидки на вишлист · 27 августа
-Со скидкой: 35 из 375 · новых: 4
+Со скидкой: 77 из 418 · новых: 4
 
 🆕 -75% Red Dead Redemption 2
    2 599,00₴ → 649,00₴ · до 8 сент., 20:00
@@ -41,7 +41,13 @@
    TG_CHAT_ID=твой chat id
    ```
 
-   `chat_id`: напиши боту любое сообщение, открой `https://api.telegram.org/bot<ТОКЕН>/getUpdates` и возьми `"chat":{"id":...}`.
+   `TG_CHAT_ID` — это не бот, а твой чат с ним, то есть куда боту писать. Узнать так: напиши боту в Telegram любое сообщение, потом запусти
+
+   ```
+   node tools/chat-id.js
+   ```
+
+   Скрипт покажет строку вида `TG_CHAT_ID=123456789` — впиши её в `.env`. Токен он читает из `.env` и в вывод не печатает, так что показывать вывод кому-то безопасно.
 
 3. **Проверка без отправки:**
 
@@ -111,10 +117,13 @@ src/telegram.js   — sendMessage, getMe
 src/index.js      — точка входа, режимы --dry и --loop, уведомление об ошибке
 
 tools/chat-id.js         — показать свой chat_id (токен в вывод не попадает)
+tools/resolve-names.js   — превратить games.txt со названиями в games.json с appid
 tools/resolve-missing.js — попытка найти appid для записей без него, результат ненадёжен
+
+docs/get-wishlist.md     — четыре способа получить список игр
 ```
 
-Список игр берётся из файла: `games.json`, `game.json` или `wishlist-items.json` — что найдётся первым. Записи без `appid` (статусы `skipped`, `ambiguous`, `notfound`) в дайджест не попадают.
+Список игр берётся из файла: `games.json`, `game.json` или `wishlist-items.json` — что найдётся первым, либо из пути в `GAMES_FILE`. Записи без `appid` (в выгрузке расширения это статусы `skipped`, `ambiguous`, `notfound`) пропускаются.
 
 Подробности для доработки — в [ARCHITECTURE.md](ARCHITECTURE.md).
 
