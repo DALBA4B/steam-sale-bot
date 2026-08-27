@@ -21,6 +21,16 @@ function loadDotEnv() {
 }
 loadDotEnv();
 
+// Список игр ищем под привычными именами: как назовёшь файл, так и подхватится.
+function findGamesFile() {
+    if (process.env.GAMES_FILE) return path.resolve(ROOT, process.env.GAMES_FILE);
+    for (const n of ['games.json', 'game.json', 'wishlist-items.json']) {
+        const p = path.join(ROOT, n);
+        if (fs.existsSync(p)) return p;
+    }
+    return path.join(ROOT, 'games.json');
+}
+
 function num(name, def) {
     const v = Number(process.env[name]);
     return Number.isFinite(v) ? v : def;
@@ -41,7 +51,7 @@ export const cfg = {
     minDiscount: num('MIN_DISCOUNT', 1),
 
     // Откуда брать appid: файл выгрузки расширения или свой список.
-    gamesFile: process.env.GAMES_FILE || path.join(ROOT, 'games.json'),
+    gamesFile: findGamesFile(),
     stateFile: process.env.STATE_FILE || path.join(ROOT, 'state.json'),
 
     // Время ежедневной отправки в режиме --loop (по Киеву).

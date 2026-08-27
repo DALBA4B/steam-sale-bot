@@ -32,9 +32,18 @@ export function loadAppIds(file = cfg.gamesFile) {
         }
     } else if (raw && typeof raw === 'object') {
         if (Array.isArray(raw.items)) return loadAppIdsFrom(raw.items);
+        // Выгрузка расширения — объект, где ключ это id страницы на игрухе, а не appid Steam.
+        // Поэтому у объектов-значений берём только поле appid: ключ как appid трактовать нельзя,
+        // иначе в список попадут чужие игры (проверено: два id игрухи совпали с реальными appid).
         for (const [k, v] of Object.entries(raw)) {
-            if (v && typeof v === 'object' && (v.appid ?? v.id)) push(v.appid ?? v.id);
-            else push(k);
+            if (v && typeof v === 'object') {
+                // В выгрузке расширения есть и appid Steam, и id страницы игрухи, и числовой slug.
+                // Брать можно только appid: если он null, запись пропускаем совсем.
+                if ('appid' in v) push(v.appid);
+                else push(v.id);
+            } else {
+                push(k);
+            }
         }
     }
     if (!out.size) throw new Error(`В файле ${file} не нашлось ни одного appid.`);

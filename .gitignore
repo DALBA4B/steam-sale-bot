@@ -3,8 +3,11 @@
 
 # Личные данные и рабочее состояние
 games.json
+game.json
 state.json
 wishlist-items.json
+extra.json
+extra.suggested.json
 
 # Node
 node_modules/

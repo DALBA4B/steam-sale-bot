@@ -39,7 +39,7 @@ export function sortItems(items) {
 function line(it) {
     const badge = it.isNew ? '🆕 ' : '';
     const name = `<a href="${it.url}">${esc(it.name)}</a>`;
-    const price = `<s>${esc(it.originalText)}</s> → <b>${esc(it.finalText)}</b>`;
+    const price = `${esc(it.originalText)} → <b>${esc(it.finalText)}</b>`;
     return `${badge}<b>-${it.discountPct}%</b> ${name}\n   ${price} · ${esc(tail(it))}`;
 }
 

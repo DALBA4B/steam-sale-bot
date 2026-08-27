@@ -107,7 +107,12 @@ src/state.js      — что видели в прошлый раз: 🆕 и «и
 src/format.js     — сборка HTML-сообщения, сортировка, нарезка по лимиту 4096
 src/telegram.js   — sendMessage, getMe
 src/index.js      — точка входа, режимы --dry и --loop, уведомление об ошибке
+
+tools/chat-id.js         — показать свой chat_id (токен в вывод не попадает)
+tools/resolve-missing.js — попытка найти appid для записей без него, результат ненадёжен
 ```
+
+Список игр берётся из файла: `games.json`, `game.json` или `wishlist-items.json` — что найдётся первым. Записи без `appid` (статусы `skipped`, `ambiguous`, `notfound`) в дайджест не попадают.
 
 Подробности для доработки — в [ARCHITECTURE.md](ARCHITECTURE.md).
 
