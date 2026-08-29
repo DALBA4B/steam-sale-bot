@@ -59,6 +59,10 @@ export const cfg = {
     sendHour: num('SEND_HOUR', 20),
     sendMinute: num('SEND_MINUTE', 30),
 
+    // IsThereAnyDeal: нужен только для пометок «хорошая скидка / бывало дешевле».
+    // Без ключа бот работает как раньше, просто без этих пометок.
+    itadKey: process.env.ITAD_KEY || '',
+
     // Служебное
     batchSize: num('BATCH_SIZE', 200),
     maxItems: num('MAX_ITEMS', 0), // 0 = без ограничения, иначе обрезать список в сообщении

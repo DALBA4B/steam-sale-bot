@@ -4,9 +4,11 @@
 //   node src/index.js --loop   — висит в процессе и отправляет раз в сутки в SEND_HOUR:SEND_MINUTE по Киеву
 import { cfg, assertTelegram } from './config.js';
 import { loadAppIds, fetchPrices, pickDiscounted } from './steam.js';
-import { loadState, saveState, applyState } from './state.js';
+import { loadState, saveState, applyState, rememberRecords } from './state.js';
 import { buildMessages, esc } from './format.js';
 import { sendAll, whoAmI } from './telegram.js';
+import { getSteamLows } from './itad.js';
+import { rate } from './rate.js';
 
 const args = process.argv.slice(2);
 const DRY = args.includes('--dry');
@@ -23,6 +25,19 @@ async function runOnce() {
     const state = loadState();
     applyState(state, discounted);
 
+    // Оценка скидки. Минимумы тянем только по тем играм, что сейчас в скидке,
+    // и только если задан ITAD_KEY: без него бот работает, просто без пометок.
+    let lows = {};
+    if (cfg.itadKey && discounted.length) {
+        try {
+            lows = await getSteamLows(discounted.map((i) => i.appid));
+        } catch (e) {
+            console.log(`ITAD недоступен, пометки пропускаю: ${e.message}`);
+        }
+    }
+    for (const it of discounted) rate(it, lows[it.appid]);
+    rememberRecords(state, discounted);
+
     const messages = buildMessages(discounted, appids.length);
 
     if (DRY) {
@@ -35,7 +50,8 @@ async function runOnce() {
     }
 
     // Состояние пишем только после успешной отправки, иначе 🆕 потеряется при сбое.
-    saveState(state);
+    // В --dry не пишем вообще: проверочный прогон не должен подделывать историю скидок.
+    if (!DRY) saveState(state);
     return discounted.length;
 }
 

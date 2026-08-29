@@ -38,9 +38,17 @@ export function sortItems(items) {
 
 function line(it) {
     const badge = it.isNew ? '🆕 ' : '';
+    const mark = it.rating ? it.rating.icon + ' ' : '';
     const name = `<a href="${it.url}">${esc(it.name)}</a>`;
     const price = `${esc(it.originalText)} → <b>${esc(it.finalText)}</b>`;
-    return `${badge}<b>-${it.discountPct}%</b> ${name}\n   ${price} · ${esc(tail(it))}`;
+
+    // Третья строка появляется только если есть что сказать: оценка скидки и заметки.
+    const extra = [];
+    if (it.rating) extra.push(it.rating.text);
+    for (const n of it.notes || []) extra.push(n);
+    const note = extra.length ? `\n   ${esc(extra.join(' · '))}` : '';
+
+    return `${badge}${mark}<b>-${it.discountPct}%</b> ${name}\n   ${price} · ${esc(tail(it))}${note}`;
 }
 
 // Возвращает массив сообщений: заголовок + строки, разрезанные по лимиту.

@@ -9,6 +9,7 @@ state.json
 wishlist-items.json
 extra.json
 extra.suggested.json
+itad-cache.json
 
 # Node
 node_modules/

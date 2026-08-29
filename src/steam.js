@@ -113,6 +113,9 @@ function normalize(it) {
         finalText: p?.formatted_final_price || '',
         originalText: p?.formatted_original_price || p?.formatted_final_price || '',
         endsAt: disc?.discount_end_date ? Number(disc.discount_end_date) : 0,
+        // '#discount_desc_preset_launch' → 'launch'. Тип акции: стартовая скидка и
+        // выходные это обычная рутина, а вот безымянная скидка чаще всего сезонная.
+        dealType: String(disc?.discount_description || '').replace(/^#discount_desc_preset_/, ''),
         url: `https://store.steampowered.com/app/${it.appid}/?cc=${cfg.cc.toLowerCase()}`
     };
 }
