@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Steam Wishlist → steam-sale-bot",
+  "version": "1.0.0",
+  "description": "Одной кнопкой обновляет games.json в папке бота: полное зеркало вишлиста Steam.",
+  "permissions": ["scripting", "tabs"],
+  "host_permissions": ["https://store.steampowered.com/*"],
+  "action": {
+    "default_title": "Обновить вишлист",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html"
+}

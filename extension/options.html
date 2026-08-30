@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Настройки — Steam Wishlist → бот</title>
+    <style>
+        :root { color-scheme: dark; }
+        body {
+            max-width: 620px;
+            margin: 0 auto;
+            padding: 28px 20px;
+            background: #1b2838;
+            color: #c7d5e0;
+            font: 14px/1.6 system-ui, sans-serif;
+        }
+        h1 { font-size: 18px; color: #fff; margin: 0 0 4px; }
+        p.lead { margin: 0 0 20px; color: #7a94a8; }
+        button {
+            padding: 9px 16px;
+            border: 0;
+            border-radius: 3px;
+            background: #4c6b22;
+            color: #d2e885;
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button.ghost { background: #33445a; color: #c7d5e0; }
+        #state { margin: 18px 0; padding: 12px 14px; border-radius: 3px; background: #16202d; }
+        #state.ok { border-left: 3px solid #a4d007; }
+        #state.err { border-left: 3px solid #ff7b72; }
+        code { background: #16202d; padding: 1px 5px; border-radius: 3px; }
+        ol { padding-left: 22px; }
+        .row { display: flex; gap: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Папка бота</h1>
+    <p class="lead">Расширение пишет в неё один файл — <code>games.json</code> — и больше ничего не читает и не трогает.</p>
+
+    <div id="state">Проверяю…</div>
+
+    <div class="row">
+        <button id="pick">Выбрать папку</button>
+        <button id="forget" class="ghost">Забыть папку</button>
+    </div>
+
+    <h1 style="margin-top:28px">Как этим пользоваться</h1>
+    <ol>
+        <li>Укажи тут папку бота (ту, где лежит <code>run.bat</code>).</li>
+        <li>Жми на иконку расширения → «Обновить вишлист». Steam-вкладку открывать не обязательно, но залогиненным быть надо.</li>
+        <li>Запусти <code>run.bat</code> — дайджест уйдёт в Telegram по свежему списку.</li>
+    </ol>
+    <p>Список — полное зеркало вишлиста: убрал игру в Steam, она исчезнет и из дайджеста.</p>
+
+    <script type="module" src="options.js"></script>
+</body>
+</html>
