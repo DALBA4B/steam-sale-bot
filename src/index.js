@@ -3,7 +3,8 @@
 //   node src/index.js --dry    — то же, но без отправки: печатает сообщение в консоль
 //   node src/index.js --loop   — висит в процессе и отправляет раз в сутки в SEND_HOUR:SEND_MINUTE по Киеву
 import { cfg, assertTelegram } from './config.js';
-import { loadAppIds, fetchPrices, pickDiscounted } from './steam.js';
+import { fetchPrices, pickDiscounted } from './steam.js';
+import { getAppIds } from './wishlist.js';
 import { loadState, saveState, applyState, rememberRecords } from './state.js';
 import { buildMessages, esc } from './format.js';
 import { sendAll, whoAmI } from './telegram.js';
@@ -15,7 +16,7 @@ const DRY = args.includes('--dry');
 const LOOP = args.includes('--loop');
 
 async function runOnce() {
-    const appids = loadAppIds();
+    const appids = await getAppIds();
     console.log(`Игр в списке: ${appids.length}. Тяну цены (${cfg.cc})…`);
 
     const items = await fetchPrices(appids);

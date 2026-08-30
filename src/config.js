@@ -47,6 +47,11 @@ export const cfg = {
     cc: process.env.STEAM_CC || 'UA',
     lang: process.env.STEAM_LANG || 'english',
 
+    // SteamID64 (17 цифр). Если задан — бот берёт вишлист прямо из Steam на каждом
+    // прогоне, файл со списком нужен только как запас. Требует «Игровые данные:
+    // Открытые» в настройках приватности профиля. Узнать id: node tools/steam-id.js
+    steamId: (process.env.STEAM_ID || '').trim(),
+
     // Порог: 1 = любая скидка. Поставь 30, если хочешь только от 30%.
     minDiscount: num('MIN_DISCOUNT', 1),
 
