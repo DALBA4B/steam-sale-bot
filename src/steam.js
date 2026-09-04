@@ -27,8 +27,8 @@ export function loadAppIds(file = cfg.gamesFile) {
 
     if (Array.isArray(raw)) {
         for (const it of raw) {
-            if (it && typeof it === 'object') push(it.appid ?? it.id);
-            else push(it);
+        if (it && typeof it === 'object') push(it.appid);
+        else push(it);
         }
     } else if (raw && typeof raw === 'object') {
         if (Array.isArray(raw.items)) return loadAppIdsFrom(raw.items);
@@ -38,9 +38,9 @@ export function loadAppIds(file = cfg.gamesFile) {
         for (const [k, v] of Object.entries(raw)) {
             if (v && typeof v === 'object') {
                 // В выгрузке расширения есть и appid Steam, и id страницы игрухи, и числовой slug.
-                // Брать можно только appid: если он null, запись пропускаем совсем.
+                // Брать можно только appid: без него запись пропускаем совсем
+                // (статусы skipped/ambiguous/notfound), иначе в список попадут чужие игры.
                 if ('appid' in v) push(v.appid);
-                else push(v.id);
             } else {
                 push(k);
             }
@@ -53,7 +53,8 @@ export function loadAppIds(file = cfg.gamesFile) {
 function loadAppIdsFrom(arr) {
     const out = new Set();
     for (const it of arr) {
-        const n = Number(it?.appid ?? it?.id ?? it);
+        // id у записи — это id страницы, а не appid Steam, поэтому fallback на него нельзя.
+        const n = Number(it && typeof it === 'object' ? it.appid : it);
         if (Number.isInteger(n) && n > 0) out.add(n);
     }
     return [...out];
@@ -106,7 +107,6 @@ function normalize(it) {
         appid: it.appid,
         name: it.name || `appid ${it.appid}`,
         free: !!it.is_free,
-        unreleased: !!it.is_early_access === false && !p, // нет варианта покупки — обычно не вышла или снята
         discountPct: Number(p?.discount_pct || 0),
         finalCents: Number(p?.final_price_in_cents || 0),
         originalCents: Number(p?.original_price_in_cents || p?.final_price_in_cents || 0),
