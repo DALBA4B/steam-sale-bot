@@ -32,7 +32,9 @@ function save(c) {
 const sleep = (ms) => new Promise((s) => setTimeout(s, ms));
 
 async function lookup(appid) {
-    const r = await fetch(`${API}/games/lookup/v1?key=${cfg.itadKey}&appid=${appid}`);
+    const r = await fetch(`${API}/games/lookup/v1?key=${cfg.itadKey}&appid=${appid}`, {
+        signal: AbortSignal.timeout(30000)
+    });
     if (r.status === 429) throw new Error('ITAD: превышен лимит запросов');
     if (!r.ok) throw new Error(`ITAD lookup ${r.status}`);
     const j = await r.json();
@@ -43,7 +45,8 @@ async function storeLows(ids) {
     const r = await fetch(`${API}/games/storelow/v2?key=${cfg.itadKey}&shops=${SHOP_STEAM}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(ids)
+        body: JSON.stringify(ids),
+        signal: AbortSignal.timeout(60000)
     });
     if (!r.ok) throw new Error(`ITAD storelow ${r.status}`);
     return await r.json();

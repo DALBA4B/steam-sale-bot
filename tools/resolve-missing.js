@@ -45,4 +45,6 @@ for (const r of missing) {
 const file = path.join(ROOT_DIR, 'extra.suggested.json');
 fs.writeFileSync(file, JSON.stringify(out, null, 2), 'utf8');
 console.log(`\nПредложения записаны в ${path.basename(file)}.`);
-console.log('Проверь список, удали лишнее и переименуй файл в extra.json — он подмешается к основному.');
+console.log('Проверь список и добавь нужные appid в свой список игр:');
+console.log('  в games.json или строкой «Название = appid» в games.txt.');
+console.log('Сам бот extra.json не читает — подключать его целиком нельзя, часть догадок неверна.');

@@ -70,7 +70,10 @@ async function getJson(url, tries = 3) {
     let lastErr;
     for (let i = 0; i < tries; i++) {
         try {
-            const r = await fetch(url, { headers: { 'User-Agent': 'steam-sale-bot' } });
+            const r = await fetch(url, {
+                headers: { 'User-Agent': 'steam-sale-bot' },
+                signal: AbortSignal.timeout(30000) // висящее соединение не должно блокировать прогон
+            });
             if (r.status === 429 || r.status >= 500) throw new Error(`HTTP ${r.status}`);
             if (!r.ok) throw new Error(`HTTP ${r.status}`);
             return await r.json();

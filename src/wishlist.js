@@ -21,7 +21,8 @@ export async function fetchWishlist(steamId = cfg.steamId) {
         throw new Error(`STEAM_ID не похож на SteamID64: ${steamId}`);
     }
     const r = await fetch(`${API}?steamid=${steamId}`, {
-        headers: { accept: 'application/json' }
+        headers: { accept: 'application/json' },
+        signal: AbortSignal.timeout(30000)
     });
     if (!r.ok) throw new Error(`Steam ответил ${r.status}`);
 

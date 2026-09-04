@@ -22,7 +22,11 @@ export function loadState(file = cfg.stateFile) {
 }
 
 export function saveState(state, file = cfg.stateFile) {
-    fs.writeFileSync(file, JSON.stringify(state, null, 2), 'utf8');
+    // Сначала во временный файл, потом переименование: если процесс умрёт посреди
+    // записи, state.json не останется обрезанным — иначе loadState молча обнулит историю.
+    const tmp = `${file}.tmp`;
+    fs.writeFileSync(tmp, JSON.stringify(state, null, 2), 'utf8');
+    fs.renameSync(tmp, file);
 }
 
 // Дополняет записи полями isNew, dayNumber и past (история прошлых скидок),

@@ -5,7 +5,8 @@ async function call(method, body) {
     const r = await fetch(`https://api.telegram.org/bot${cfg.token}/${method}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(60000)
     });
     const j = await r.json().catch(() => ({}));
     if (!j.ok) {

@@ -32,7 +32,10 @@ function findGamesFile() {
 }
 
 function num(name, def) {
-    const v = Number(process.env[name]);
+    // Пустая строка — это «не задано», а не 0: иначе MIN_DISCOUNT= молча отключил бы порог.
+    const raw = (process.env[name] ?? '').trim();
+    if (raw === '') return def;
+    const v = Number(raw);
     return Number.isFinite(v) ? v : def;
 }
 
